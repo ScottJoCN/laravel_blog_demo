@@ -133,24 +133,24 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','isAdmin']], function
   });
 });
 
-//?????????????
+//Route group:has login and admin
 Route::group(['middleware' => ['auth','isAdmin']], function()
 {
-  //????
+  //psw reset
   Route::get('user/{user}/reset', function(App\User $user)
   {
     $user->password = Hash::make('123456');
     $user->save();
     return Redirect::to('admin/users')->with('message', array('type' => 'success', 'content' => 'Reset password successfully'));
   });
-    //????
+    //lock user
   Route::get('user/{user}/delete', function(App\User $user)
   {
     $user->block = 1;
     $user->save();
     return Redirect::to('admin/users')->with('message', array('type' => 'success', 'content' => 'Lock user successfully'));
   });
-//????
+//unlock user
   Route::get('user/{user}/unblock', function(App\User $user)
   {
     $user->block = 0;
@@ -158,3 +158,5 @@ Route::group(['middleware' => ['auth','isAdmin']], function()
     return Redirect::to('admin/users')->with('message', array('type' => 'success', 'content' => 'Unlock user successfully'));
   });
 });
+Route::post('article/preview',['middleware'=>'auth','uses'=>'ArticleController@preview']);
+Route::resource('article','ArticleController');
