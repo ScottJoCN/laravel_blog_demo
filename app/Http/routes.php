@@ -12,7 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('index');
+  $articles = App\Article::with('user','tags')->orderBy('created_at','desc')->paginate(2);
+  $tags = App\Tag::where('count','>','0')->orderBy('count','desc')->orderBy('updated_at','desc')->take(10)->get();
+    return view('index')->with('articles',$articles)->with('tags',$tags);
 });
 Route::get('login', function()
 {
@@ -33,7 +35,7 @@ Route::post('login',function(){
 		],
 		(boolean) Request::input('remember_me')))
 	{
-		return Redirect::to('home');
+		return Redirect::to('/');
 	}
 	else{
 		return Redirect::to('login')->withInput()->with('message',array('type'=>'danger','content'=>'E-mail or password error'));
@@ -43,8 +45,9 @@ Route::post('login',function(){
 		return Redirect::to('login')->withInput()->withErrors($validator);
 	}
 });
-Route::get('home',['middleware'=> 'auth' , function(){
-	return view('home');
+Route::get('home', ['middleware' => 'auth', function()
+{
+  return view('home')->with('user', Auth::user())->with('articles', App\Article::with('tags')->where('user_id', '=', Auth::id())->orderBy('created_at', 'desc')->get());
 }]);
 Route::get('logout',['middleware'=>'auth',function(){
 	Auth::logout();
@@ -159,4 +162,9 @@ Route::group(['middleware' => ['auth','isAdmin']], function()
   });
 });
 Route::post('article/preview',['middleware'=>'auth','uses'=>'ArticleController@preview']);
+Route::post('article/{id}/preview', ['middleware' => 'auth', 'uses' => 'ArticleController@preview']);
+Route::post('article/{id}', ['middleware' => ['auth','canOperation'], 'uses' => 'ArticleController@update']);
+Route::get('article/{id}/delete',['middleware'=>['auth','canOperation'],'uses'=>'ArticleController@destroy']);
 Route::resource('article','ArticleController');
+Route::get('user/{user}/articles', 'UserController@articles');
+
