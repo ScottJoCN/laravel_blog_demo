@@ -24,7 +24,7 @@
           @endforeach
           </td>
           <!-- ??????????????? -->
-          @if ($user->id == Auth::id())
+          @if ($user->id == Auth::id() or(Auth::check() and Auth::user()->is_admin))
             <td>
               <a href="{{ URL::to('article/'. $article->id . '/edit') }}" class="am-btn am-btn-xs am-btn-primary"><span class="am-icon-pencil"></span> Edit</a>
               <form action="{{URL::to('article/'.$article->id.'/delete')}}" method="get" accept-charset="utf-8" style="display: inline;">

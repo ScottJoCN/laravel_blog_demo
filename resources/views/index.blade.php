@@ -11,7 +11,7 @@
     			by <a href="{{ URL::to('user/'.$article->user->id . '/articles')}}" title="">{{{ $article->user->nickname}}} </a> posted on {{$article->created_at->format('Y/m/d H:i')}} under
     			{{-- echo tags --}}
     			@foreach($article->tags as $tag)
-    			<a href="#" title="" style="color:#fff" class="am-badge am-badge-success am-radius">{{ $tag->name}}</a>
+    			<a href="{{URL::to('tag/'.$tag->id.'/articles')}}" title="" style="color:#fff" class="am-badge am-badge-success am-radius">{{ $tag->name}}</a>
     			@endforeach
     		</h4>
     		<div class="am-g">
@@ -29,10 +29,10 @@
   <div class="am-u-md-4 blog-sidebar">
   	<br>
   	<div class="am-panel-group">
-  		<section class="am-panel am-panel-default"><div class="am-panel-hd"><span class="am-icon-tags"></span>Tags</div>
+  		<section class="am-panel am-panel-default"><div class="am-panel-hd"><span class="am-icon-tags"></span><a href="{{URL::to('tag')}}" title="Tags">Tags</a></div>
   			<ul class="am-list">
   				@for($i=0,$len = count($tags);$i<$len ;$i++)
-  				<li><a href="#" title="">{{$tags[$i]->name}}
+  				<li><a href="{{URL::to('tag/'.$tags[$i]->id.'/articles')}}" title="">{{$tags[$i]->name}}
   					@if($i==0)
   					<span class="am-fr am-badge am-badge-danger am-round">{{$tags[$i]->count}}</span>
   					@elseif($i ==1)

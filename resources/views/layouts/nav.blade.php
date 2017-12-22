@@ -5,6 +5,8 @@
     @if (Auth::user()->is_admin)
     <ul class="am-nav am-nav-pills am-topbar-nav">
       <li class="{{ (isset($page) and ($page == 'users')) ? 'am-active' : '' }}"><a href="{{ URL::to('admin/users') }}">Users</a></li>
+      <li class="{{ (isset($page) and ($page=='articles')) ? 'am-active' :''}}"><a href="{{URL::to('admin/articles')}}" title="">Articles</a></li>
+      <li class="{{ (isset($page) and ($page=='tags')) ? 'am-active' :'' }}"><a href="{{URL::to('admin/tags')}}" title="">Tags</a></li>
     </ul>
     @endif
     <div class="am-topbar-right">

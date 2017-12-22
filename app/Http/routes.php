@@ -134,6 +134,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','isAdmin']], function
   {
     return view('admin.users.list')->with('users', App\User::all())->with('page', 'users');
   });
+  Route::get('articles','AdminController@articles');
+  Route::get('tags','AdminController@tags');
 });
 
 //Route group:has login and admin
@@ -165,6 +167,11 @@ Route::post('article/preview',['middleware'=>'auth','uses'=>'ArticleController@p
 Route::post('article/{id}/preview', ['middleware' => 'auth', 'uses' => 'ArticleController@preview']);
 Route::post('article/{id}', ['middleware' => ['auth','canOperation'], 'uses' => 'ArticleController@update']);
 Route::get('article/{id}/delete',['middleware'=>['auth','canOperation'],'uses'=>'ArticleController@destroy']);
-Route::resource('article','ArticleController');
+
 Route::get('user/{user}/articles', 'UserController@articles');
 
+Route::post('tag/{id}',['middleware'=>'auth','users'=>'TagController@update']);
+Route::post('tag/{id}/delete',['middleware'=>'auth','users'=>'TagController@destory']);
+Route::get('tag/{id}/articles','TagController@articles');
+Route::resource('article','ArticleController');
+Route::resource('tag','TagController');
